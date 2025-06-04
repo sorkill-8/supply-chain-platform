@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                 xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                 xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+                 xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+                 xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
+                 id="Definitions_CheckReputation"
+                 targetNamespace="http://bpmn.io/schema/bpmn">
+
+ <bpmn:process id="CheckReputationProcess" name="Check a Supplier's Reputation" isExecutable="true" camunda:historyTimeToLive="8">
+ 
+   <!-- START -->
+   <bpmn:startEvent id="StartEvent_Check" name="Start">
+     <bpmn:outgoing>Flow_1</bpmn:outgoing>
+   </bpmn:startEvent>
+
+   <!-- USER3: Inserisce l'address del fornitore di cui verificare la reputazione -->
+   <bpmn:userTask id="Task_InsertAddress" name="Enter Supplier Address" camunda:assignee="user3">
+     <bpmn:extensionElements>
+       <camunda:formData>
+         <camunda:formField id="supplierAddress" label="Supplier's Ethereum Address" type="string"/>
+       </camunda:formData>
+     </bpmn:extensionElements>
+     <bpmn:incoming>Flow_1</bpmn:incoming>
+     <bpmn:outgoing>Flow_2</bpmn:outgoing>
+   </bpmn:userTask>
+
+   <!-- SERVICE TASK: Recupera reputazione dal contratto TrustLedger -->
+   <bpmn:serviceTask id="Task_CheckReputation" name="Retrieve Reputation"
+                     camunda:class="com.delegates.CheckReputationDelegate">
+     <bpmn:incoming>Flow_2</bpmn:incoming>
+     <bpmn:outgoing>Flow_3</bpmn:outgoing>
+   </bpmn:serviceTask>
+
+   <!-- END -->
+   <bpmn:endEvent id="EndEvent_Check" name="End">
+     <bpmn:incoming>Flow_3</bpmn:incoming>
+   </bpmn:endEvent>
+
+   <!-- FLOWS -->
+   <bpmn:sequenceFlow id="Flow_1" sourceRef="StartEvent_Check" targetRef="Task_InsertAddress"/>
+   <bpmn:sequenceFlow id="Flow_2" sourceRef="Task_InsertAddress" targetRef="Task_CheckReputation"/>
+   <bpmn:sequenceFlow id="Flow_3" sourceRef="Task_CheckReputation" targetRef="EndEvent_Check"/>
+
+ </bpmn:process>
+
+ <bpmndi:BPMNDiagram id="BPMNDiagram_CheckReputation">
+   <bpmndi:BPMNPlane id="BPMNPlane_Check" bpmnElement="CheckReputationProcess"/>
+ </bpmndi:BPMNDiagram>
+
+</bpmn:definitions>

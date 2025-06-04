@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                 xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                 xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+                 xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+                 xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
+                 id="Definitions_RetrieveProducerInfo"
+                 targetNamespace="http://bpmn.io/schema/bpmn">
+
+  <bpmn:process id="RetrieveProducerInfo" name="Retrieve a Producer Info" isExecutable="true" camunda:historyTimeToLive="8">
+
+    <!-- START -->
+    <bpmn:startEvent id="StartEvent_1" name="Inizio">
+      <bpmn:outgoing>Flow_1</bpmn:outgoing>
+    </bpmn:startEvent>
+
+    <!-- USER TASK: Inserimento Address -->
+    <bpmn:userTask id="Task_InsertAddress" name="Inserisci address del produttore" camunda:assignee="user3">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="producerAddress" label="Address Ethereum del produttore" type="string"/>
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1</bpmn:incoming>
+      <bpmn:outgoing>Flow_2</bpmn:outgoing>
+    </bpmn:userTask>
+
+    <!-- SERVICE TASK: Recupero Info -->
+    <bpmn:serviceTask id="Task_FetchProducerInfo" name="Recupera informazioni del produttore"
+                      camunda:class="com.delegates.FindProducerDelegate">
+      <bpmn:incoming>Flow_2</bpmn:incoming>
+      <bpmn:outgoing>Flow_3</bpmn:outgoing>
+    </bpmn:serviceTask>
+
+    <!-- USER TASK: Conferma -->
+    <bpmn:userTask id="Task_Confirmation" name="Dati stampati in console" camunda:assignee="user1">
+      <bpmn:incoming>Flow_3</bpmn:incoming>
+      <bpmn:outgoing>Flow_4</bpmn:outgoing>
+    </bpmn:userTask>
+
+    <!-- END -->
+    <bpmn:endEvent id="EndEvent_1" name="Fine">
+      <bpmn:incoming>Flow_4</bpmn:incoming>
+    </bpmn:endEvent>
+
+    <!-- FLOWS -->
+    <bpmn:sequenceFlow id="Flow_1" sourceRef="StartEvent_1" targetRef="Task_InsertAddress"/>
+    <bpmn:sequenceFlow id="Flow_2" sourceRef="Task_InsertAddress" targetRef="Task_FetchProducerInfo"/>
+    <bpmn:sequenceFlow id="Flow_3" sourceRef="Task_FetchProducerInfo" targetRef="Task_Confirmation"/>
+    <bpmn:sequenceFlow id="Flow_4" sourceRef="Task_Confirmation" targetRef="EndEvent_1"/>
+
+  </bpmn:process>
+
+  <bpmndi:BPMNDiagram id="BPMNDiagram_RetrieveProducerInfo">
+    <bpmndi:BPMNPlane id="BPMNPlane_Retrieve" bpmnElement="RetrieveProducerInfo"/>
+  </bpmndi:BPMNDiagram>
+
+</bpmn:definitions>

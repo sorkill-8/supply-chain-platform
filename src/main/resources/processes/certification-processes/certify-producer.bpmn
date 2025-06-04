@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                 xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                 xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+                 xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+                 xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
+                 id="Definitions_CertifyProducer"
+                 targetNamespace="http://bpmn.io/schema/bpmn">
+
+  <bpmn:process id="CertifyProducerProcess" name="Certify a Producer" isExecutable="true" camunda:historyTimeToLive="8">
+  
+    <!-- START -->
+    <bpmn:startEvent id="StartEvent_Certify" name="Start">
+      <bpmn:outgoing>Flow_1</bpmn:outgoing>
+    </bpmn:startEvent>
+
+    <!-- USER TASK: Inserimento Address -->
+    <bpmn:userTask id="Task_FillProducerAddress" name="Inserisci address produttore" camunda:assignee="admin">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="producerAddress" label="Address Ethereum del produttore" type="string"/>
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1</bpmn:incoming>
+      <bpmn:outgoing>Flow_2</bpmn:outgoing>
+    </bpmn:userTask>
+
+    <!-- SERVICE TASK: Certifica produttore -->
+    <bpmn:serviceTask id="Task_CertifyProducer" name="Certifica su Blockchain"
+                      camunda:class="com.delegates.CertifyProducerDelegate">
+      <bpmn:incoming>Flow_2</bpmn:incoming>
+      <bpmn:outgoing>Flow_3</bpmn:outgoing>
+    </bpmn:serviceTask>
+
+    <!-- END -->
+    <bpmn:endEvent id="EndEvent_Certify" name="Fine">
+      <bpmn:incoming>Flow_3</bpmn:incoming>
+    </bpmn:endEvent>
+
+    <!-- FLOWS -->
+    <bpmn:sequenceFlow id="Flow_1" sourceRef="StartEvent_Certify" targetRef="Task_FillProducerAddress"/>
+    <bpmn:sequenceFlow id="Flow_2" sourceRef="Task_FillProducerAddress" targetRef="Task_CertifyProducer"/>
+    <bpmn:sequenceFlow id="Flow_3" sourceRef="Task_CertifyProducer" targetRef="EndEvent_Certify"/>
+
+  </bpmn:process>
+
+  <bpmndi:BPMNDiagram id="BPMNDiagram_CertifyProducer">
+    <bpmndi:BPMNPlane id="BPMNPlane_Certify" bpmnElement="CertifyProducerProcess"/>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

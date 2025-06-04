@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+                  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+                  xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
+                  id="Definitions_AddProducer"
+                  targetNamespace="http://bpmn.io/schema/bpmn">
+
+  <bpmn:process id="AddProducerProcess" name="Add a Producer" isExecutable="true" camunda:historyTimeToLive="8">
+
+    <!-- START -->
+    <bpmn:startEvent id="StartEvent_1" name="Start">
+      <bpmn:outgoing>Flow_1</bpmn:outgoing>
+    </bpmn:startEvent>
+
+    <!-- USER TASK: Inserisce dati del produttore -->
+    <bpmn:userTask id="Task_InsertProducerData" name="Insert Producer Data" camunda:assignee="user1">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="name" label="Producer Name" type="string" />
+          <camunda:formField id="phoneNo" label="Phone Number" type="string" />
+          <camunda:formField id="cityState" label="City and State" type="string" />
+          <camunda:formField id="country" label="Country" type="string" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1</bpmn:incoming>
+      <bpmn:outgoing>Flow_2</bpmn:outgoing>
+    </bpmn:userTask>
+
+    <!-- SERVICE TASK: Delegate Java -->
+    <bpmn:serviceTask id="Task_AddProducerDelegate" name="Register Producer on Blockchain"
+                      camunda:class="com.delegates.AddProducerDelegate">
+      <bpmn:incoming>Flow_2</bpmn:incoming>
+      <bpmn:outgoing>Flow_3</bpmn:outgoing>
+    </bpmn:serviceTask>
+
+    <!-- END -->
+    <bpmn:endEvent id="EndEvent_1" name="End">
+      <bpmn:incoming>Flow_3</bpmn:incoming>
+    </bpmn:endEvent>
+
+    <!-- SEQUENCE FLOWS -->
+    <bpmn:sequenceFlow id="Flow_1" sourceRef="StartEvent_1" targetRef="Task_InsertProducerData" />
+    <bpmn:sequenceFlow id="Flow_2" sourceRef="Task_InsertProducerData" targetRef="Task_AddProducerDelegate" />
+    <bpmn:sequenceFlow id="Flow_3" sourceRef="Task_AddProducerDelegate" targetRef="EndEvent_1" />
+
+  </bpmn:process>
+
+  <bpmndi:BPMNDiagram id="BPMNDiagram_AddProducer">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="AddProducerProcess"/>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

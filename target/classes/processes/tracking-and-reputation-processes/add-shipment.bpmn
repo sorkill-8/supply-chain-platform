@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+                xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+                xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
+                id="Definitions_1"
+                targetNamespace="http://bpmn.io/schema/bpmn">
+
+  <bpmn:process id="AddShipmentProcess" name="Add a Shipment" isExecutable="true" camunda:historyTimeToLive="8">
+
+    <!-- START -->
+    <bpmn:startEvent id="StartEvent_1" name="Inizio">
+      <bpmn:outgoing>Flow_1</bpmn:outgoing>
+    </bpmn:startEvent>
+
+    <!-- USER1 inserisce i dati della spedizione -->
+    <bpmn:userTask id="Task_FillShipmentData" name="Compila dati spedizione" camunda:assignee="user1">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="trackingNo" label="Codice Tracking" type="string" />
+          <camunda:formField id="item" label="Nome Prodotto" type="string" />
+          <camunda:formField id="quantity" label="Quantità" type="long" />
+          <camunda:formField id="location1" label="Posizione Iniziale (ID numerico)" type="long" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1</bpmn:incoming>
+      <bpmn:outgoing>Flow_2</bpmn:outgoing>
+    </bpmn:userTask>
+
+    <!-- La spedizione viene salvata sulla Blockchain -->
+    <bpmn:serviceTask id="Task_AddShipment" name="Registra spedizione su Blockchain"
+                      camunda:class="com.delegates.AddShipmentDelegate">
+      <bpmn:incoming>Flow_2</bpmn:incoming>
+      <bpmn:outgoing>Flow_3</bpmn:outgoing>
+    </bpmn:serviceTask>
+
+    <!-- L'utente decide se aggiungere un'altra spedizione -->
+    <bpmn:userTask id="Task_AskRepeat" name="Vuoi aggiungere un'altra spedizione?" camunda:assignee="user1">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="anotherShipment" label="Vuoi aggiungere un'altra spedizione?" type="enum">
+            <camunda:value id="yes" name="Sì"/>
+            <camunda:value id="no" name="No"/>
+          </camunda:formField>
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_3</bpmn:incoming>
+      <bpmn:outgoing>Flow_4</bpmn:outgoing>
+    </bpmn:userTask>
+
+    <!-- Gateway: valuta la scelta dell'utente -->
+    <bpmn:exclusiveGateway id="Gateway_RepeatCheck" name="Ripeti?">
+      <bpmn:incoming>Flow_4</bpmn:incoming>
+      <bpmn:outgoing>Flow_Yes</bpmn:outgoing>
+      <bpmn:outgoing>Flow_No</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+
+    <!-- END -->
+    <bpmn:endEvent id="EndEvent_1" name="Fine">
+      <bpmn:incoming>Flow_No</bpmn:incoming>
+    </bpmn:endEvent>
+
+    <!-- SEQUENCE FLOWS -->
+    <bpmn:sequenceFlow id="Flow_1" sourceRef="StartEvent_1" targetRef="Task_FillShipmentData"/>
+    <bpmn:sequenceFlow id="Flow_2" sourceRef="Task_FillShipmentData" targetRef="Task_AddShipment"/>
+    <bpmn:sequenceFlow id="Flow_3" sourceRef="Task_AddShipment" targetRef="Task_AskRepeat"/>
+    <bpmn:sequenceFlow id="Flow_4" sourceRef="Task_AskRepeat" targetRef="Gateway_RepeatCheck"/>
+    <bpmn:sequenceFlow id="Flow_Yes" sourceRef="Gateway_RepeatCheck" targetRef="Task_FillShipmentData">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression"><![CDATA[${anotherShipment == "yes"}]]></bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_No" sourceRef="Gateway_RepeatCheck" targetRef="EndEvent_1">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression"><![CDATA[${anotherShipment == "no"}]]></bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+
+  </bpmn:process>
+
+  <bpmndi:BPMNDiagram id="BPMNDiagram_AddShipment">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="AddShipmentProcess"/>
+  </bpmndi:BPMNDiagram>
+
+</bpmn:definitions>

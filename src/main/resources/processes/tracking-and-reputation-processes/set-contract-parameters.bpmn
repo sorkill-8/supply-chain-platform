@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                 xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                 xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+                 xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+                 xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
+                 id="Definitions_1"
+                 targetNamespace="http://bpmn.io/schema/bpmn">
+
+  <bpmn:process id="SetContractParameters" name="Set Contract Parameters" isExecutable="true" camunda:historyTimeToLive="8">
+
+    <!-- START: Inizio del processo -->
+    <bpmn:startEvent id="StartEvent_1" name="Inizio Processo">
+      <bpmn:outgoing>Flow_1</bpmn:outgoing>
+    </bpmn:startEvent>
+
+    <!-- USER TASK: L'amministratore inserisce i parametri contrattuali da scrivere su Blockchain -->
+    <bpmn:userTask id="Task_FillParameters" name="Inserisci Parametri Contratto" camunda:assignee="admin">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="location1" label="Location partenza (numero intero)" type="long" />
+          <camunda:formField id="location2" label="Location arrivo (numero intero)" type="long" />
+          <camunda:formField id="leadTime" label="Tempo massimo di consegna (secondi)" type="long" />
+          <camunda:formField id="payment" label="Pagamento in token" type="long" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1</bpmn:incoming>
+      <bpmn:outgoing>Flow_2</bpmn:outgoing>
+    </bpmn:userTask>
+
+    <!-- SERVICE TASK: Il delegate Java scrive i parametri nel contratto Tracking sulla Blockchain -->
+    <bpmn:serviceTask id="Task_SetParameters" name="Imposta Parametri su Blockchain"
+                      camunda:class="com.delegates.SetContractParametersDelegate">
+      <bpmn:incoming>Flow_2</bpmn:incoming>
+      <bpmn:outgoing>Flow_3</bpmn:outgoing>
+    </bpmn:serviceTask>
+
+    <!-- END: Fine del processo -->
+    <bpmn:endEvent id="EndEvent_1" name="Fine Processo">
+      <bpmn:incoming>Flow_3</bpmn:incoming>
+    </bpmn:endEvent>
+
+    <!-- SEQUENCE FLOW: Collegamenti tra i task -->
+    <bpmn:sequenceFlow id="Flow_1" sourceRef="StartEvent_1" targetRef="Task_FillParameters"/>
+    <bpmn:sequenceFlow id="Flow_2" sourceRef="Task_FillParameters" targetRef="Task_SetParameters"/>
+    <bpmn:sequenceFlow id="Flow_3" sourceRef="Task_SetParameters" targetRef="EndEvent_1"/>
+
+  </bpmn:process>
+
+  <bpmndi:BPMNDiagram id="BPMNDiagram_SetContractParameters">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="SetContractParameters"/>
+  </bpmndi:BPMNDiagram>
+
+</bpmn:definitions>
