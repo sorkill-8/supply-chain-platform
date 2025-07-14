@@ -11,37 +11,37 @@
   <bpmn:process id="AddShipmentProcess" name="Add a Shipment" isExecutable="true" camunda:historyTimeToLive="8">
 
     <!-- START -->
-    <bpmn:startEvent id="StartEvent_1" name="Inizio">
+    <bpmn:startEvent id="StartEvent_1" name="Start">
       <bpmn:outgoing>Flow_1</bpmn:outgoing>
     </bpmn:startEvent>
 
-    <!-- USER1 inserisce i dati della spedizione -->
-    <bpmn:userTask id="Task_FillShipmentData" name="Compila dati spedizione" camunda:assignee="user1">
+    <!-- USER1 enters shipping details -->
+    <bpmn:userTask id="Task_FillShipmentData" name="Enter shipping details" camunda:assignee="user1">
       <bpmn:extensionElements>
         <camunda:formData>
-          <camunda:formField id="trackingNo" label="Codice Tracking" type="string" />
-          <camunda:formField id="item" label="Nome Prodotto" type="string" />
-          <camunda:formField id="quantity" label="Quantità" type="long" />
-          <camunda:formField id="location1" label="Posizione Iniziale (ID numerico)" type="long" />
+          <camunda:formField id="trackingNo" label="Tracking Code" type="string" />
+          <camunda:formField id="item" label="Product Name" type="string" />
+          <camunda:formField id="quantity" label="Quantity" type="long" />
+          <camunda:formField id="location1" label="Starting position" type="long" />
         </camunda:formData>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1</bpmn:incoming>
       <bpmn:outgoing>Flow_2</bpmn:outgoing>
     </bpmn:userTask>
 
-    <!-- La spedizione viene salvata sulla Blockchain -->
-    <bpmn:serviceTask id="Task_AddShipment" name="Registra spedizione su Blockchain"
+    <!-- Shipment is saved on the blockchain -->
+    <bpmn:serviceTask id="Task_AddShipment" name="Save shipment on the blockchain"
                       camunda:class="com.delegates.AddShipmentDelegate">
       <bpmn:incoming>Flow_2</bpmn:incoming>
       <bpmn:outgoing>Flow_3</bpmn:outgoing>
     </bpmn:serviceTask>
 
-    <!-- L'utente decide se aggiungere un'altra spedizione -->
-    <bpmn:userTask id="Task_AskRepeat" name="Vuoi aggiungere un'altra spedizione?" camunda:assignee="user1">
+    <!-- User decides whether to add another shipment -->
+    <bpmn:userTask id="Task_AskRepeat" name="Do you want to add another shipment?" camunda:assignee="user1">
       <bpmn:extensionElements>
         <camunda:formData>
-          <camunda:formField id="anotherShipment" label="Vuoi aggiungere un'altra spedizione?" type="enum">
-            <camunda:value id="yes" name="Sì"/>
+          <camunda:formField id="anotherShipment" label="Do you want to add another shipment?" type="enum">
+            <camunda:value id="yes" name="Yes"/>
             <camunda:value id="no" name="No"/>
           </camunda:formField>
         </camunda:formData>
@@ -50,15 +50,15 @@
       <bpmn:outgoing>Flow_4</bpmn:outgoing>
     </bpmn:userTask>
 
-    <!-- Gateway: valuta la scelta dell'utente -->
-    <bpmn:exclusiveGateway id="Gateway_RepeatCheck" name="Ripeti?">
+    <!-- Gateway: evaluates user decision -->
+    <bpmn:exclusiveGateway id="Gateway_RepeatCheck" name="Repeat?">
       <bpmn:incoming>Flow_4</bpmn:incoming>
       <bpmn:outgoing>Flow_Yes</bpmn:outgoing>
       <bpmn:outgoing>Flow_No</bpmn:outgoing>
     </bpmn:exclusiveGateway>
 
     <!-- END -->
-    <bpmn:endEvent id="EndEvent_1" name="Fine">
+    <bpmn:endEvent id="EndEvent_1" name="End">
       <bpmn:incoming>Flow_No</bpmn:incoming>
     </bpmn:endEvent>
 

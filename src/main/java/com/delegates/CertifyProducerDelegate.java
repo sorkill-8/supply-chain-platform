@@ -15,7 +15,8 @@ import java.math.BigInteger;
 public class CertifyProducerDelegate implements JavaDelegate {
 
     private static final String ADMIN_PRIVATE_KEY = "0xa2b9c09bf9585b711bc5e482afb8040c26659bdeba6bd6bc16d256690a781160";
-    private static final String CERTIFICATION_CONTRACT_ADDRESS = "0x12EAb68ea02CD2805a79167e0FF4aDae54530701";
+    
+    private static final String CERTIFICATION_CONTRACT_ADDRESS = "0x3D3E8af1ce11ECB37012F9EE29087B8B46b97c75";
 
     @Override
     public void execute(DelegateExecution execution) throws Exception {
@@ -41,12 +42,12 @@ public class CertifyProducerDelegate implements JavaDelegate {
             if (result.isStatusOK()) {
             	System.out.println("\n");
                 System.out.println("╔══════════════════════════════════════════════════════╗");
-                System.out.println("║ ✅  CERTIFICAZIONE COMPLETATA CON SUCCESSO           ║");
+                System.out.println("      ✅  CERTIFICAZIONE COMPLETATA CON SUCCESSO           ");
                 System.out.println("╠══════════════════════════════════════════════════════╣");
-                System.out.println("║ 👤  Produttore certificato:                          ║");
-                System.out.println("║     ➤ Address Ethereum: " + producerAddress);
-                System.out.println("║                                                     ║");
-                System.out.println("║ ℹ️  Il produttore potrà ora operare sulla piattaforma║");
+                System.out.println(" 		Produttore certificato:                        ");
+                System.out.println("      👤 Address Ethereum: " + producerAddress);
+                System.out.println("                                                     ");
+                System.out.println("║ ℹ️ Il produttore potrà ora operare sulla piattaforma");
                 System.out.println("╚══════════════════════════════════════════════════════╝");
                 System.out.println("\n");
             } else {

@@ -15,7 +15,7 @@
      <bpmn:outgoing>Flow_1</bpmn:outgoing>
    </bpmn:startEvent>
 
-   <!-- USER3: Inserisce l'address del fornitore di cui verificare la reputazione -->
+   <!-- USER3 enters the supplier's address -->
    <bpmn:userTask id="Task_InsertAddress" name="Enter Supplier Address" camunda:assignee="user3">
      <bpmn:extensionElements>
        <camunda:formData>
@@ -26,7 +26,7 @@
      <bpmn:outgoing>Flow_2</bpmn:outgoing>
    </bpmn:userTask>
 
-   <!-- SERVICE TASK: Recupera reputazione dal contratto TrustLedger -->
+   <!-- SERVICE TASK: Retrieves reputation from TrustLedger contract -->
    <bpmn:serviceTask id="Task_CheckReputation" name="Retrieve Reputation"
                      camunda:class="com.delegates.CheckReputationDelegate">
      <bpmn:incoming>Flow_2</bpmn:incoming>

@@ -11,38 +11,38 @@
   <bpmn:process id="ReceiveShipmentProcess" name="Receive a Shipment" isExecutable="true" camunda:historyTimeToLive="8">
 
     <!-- START -->
-    <bpmn:startEvent id="StartEvent_1" name="Inizio">
+    <bpmn:startEvent id="StartEvent_1" name="Start">
       <bpmn:outgoing>Flow_1</bpmn:outgoing>
     </bpmn:startEvent>
 
-    <!-- USER2 inserisce dati di ricezione -->
-    <bpmn:userTask id="Task_FillReceptionData" name="Conferma ricezione spedizione" camunda:assignee="user2">
+    <!-- USER2 enters reception data -->
+    <bpmn:userTask id="Task_FillReceptionData" name="Confirm shipment reception" camunda:assignee="user2">
       <bpmn:extensionElements>
         <camunda:formData>
-          <camunda:formField id="trackingNo" label="Codice Tracking" type="string"/>
-          <camunda:formField id="item" label="Nome Prodotto" type="string"/>
-          <camunda:formField id="quantity" label="Quantità ricevuta" type="long"/>
-          <camunda:formField id="location1" label="Coordinate Destinazione [0]" type="long"/>
-          <camunda:formField id="location2" label="Coordinate Destinazione [1]" type="long"/>
+          <camunda:formField id="trackingNo" label="Tracking Code" type="string"/>
+          <camunda:formField id="item" label="Product Name" type="string"/>
+          <camunda:formField id="quantity" label="Quantity Received" type="long"/>
+          <camunda:formField id="location1" label="Destination Coordinates [0]" type="long"/>
+          <camunda:formField id="location2" label="Destination Coordinates [1]" type="long"/>
         </camunda:formData>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1</bpmn:incoming>
       <bpmn:outgoing>Flow_2</bpmn:outgoing>
     </bpmn:userTask>
 
-    <!-- Delegate verifica spedizione -->
-    <bpmn:serviceTask id="Task_ReceiveShipment" name="Verifica e ricezione"
+    <!-- Delegate verifies shipment -->
+    <bpmn:serviceTask id="Task_ReceiveShipment" name="Verify and confirm"
                       camunda:class="com.delegates.ReceiveShipmentDelegate">
       <bpmn:incoming>Flow_2</bpmn:incoming>
       <bpmn:outgoing>Flow_3</bpmn:outgoing>
     </bpmn:serviceTask>
 
-    <!-- USER2 decide se ripetere -->
-    <bpmn:userTask id="Task_RepeatPrompt" name="Vuoi ricevere un'altra spedizione?" camunda:assignee="user2">
+    <!-- USER2 decides whether to repeat -->
+    <bpmn:userTask id="Task_RepeatPrompt" name="Would you like to receive another shipment?" camunda:assignee="user2">
       <bpmn:extensionElements>
         <camunda:formData>
-          <camunda:formField id="anotherReception" label="Vuoi ricevere un'altra spedizione?" type="enum">
-            <camunda:value id="yes" name="Sì"/>
+          <camunda:formField id="anotherReception" label="Would you like to receive another shipment?" type="enum">
+            <camunda:value id="yes" name="Yes"/>
             <camunda:value id="no" name="No"/>
           </camunda:formField>
         </camunda:formData>
@@ -51,20 +51,20 @@
       <bpmn:outgoing>Flow_4</bpmn:outgoing>
     </bpmn:userTask>
 
-    <!-- Gateway decisionale -->
-    <bpmn:exclusiveGateway id="Gateway_RepeatDecision" name="Ripeti?">
+    <!-- Decision gateway -->
+    <bpmn:exclusiveGateway id="Gateway_RepeatDecision" name="Repeat?">
       <bpmn:incoming>Flow_4</bpmn:incoming>
       <bpmn:outgoing>Flow_Yes</bpmn:outgoing>
       <bpmn:outgoing>Flow_No</bpmn:outgoing>
     </bpmn:exclusiveGateway>
 
-    <!-- Se sì, torna alla compilazione -->
+    <!-- If yes, return to reception form -->
     <bpmn:sequenceFlow id="Flow_Yes" sourceRef="Gateway_RepeatDecision" targetRef="Task_FillReceptionData">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression"><![CDATA[${anotherReception == "yes"}]]></bpmn:conditionExpression>
     </bpmn:sequenceFlow>
 
-    <!-- Se no, fine processo -->
-    <bpmn:endEvent id="EndEvent_1" name="Fine">
+    <!-- If no, end process -->
+    <bpmn:endEvent id="EndEvent_1" name="End">
       <bpmn:incoming>Flow_No</bpmn:incoming>
     </bpmn:endEvent>
 

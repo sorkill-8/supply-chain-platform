@@ -20,7 +20,7 @@ public class SetContractParametersDelegate implements JavaDelegate {
     private static final String PRIVATE_KEY = "0xa2b9c09bf9585b711bc5e482afb8040c26659bdeba6bd6bc16d256690a781160";
 
     // Indirizzo del contratto Tracking già deployato
-    private static final String CONTRACT_ADDRESS = "0x32279D62DaDdADaC73Cd3c72184d88766cE109f5";
+    private static final String CONTRACT_ADDRESS = "0xb561AbfF1D8dc5432D7a7b46F3AF6456d5c7B59c";
 
     @Override
     public void execute(DelegateExecution execution) {
@@ -39,8 +39,7 @@ public class SetContractParametersDelegate implements JavaDelegate {
             // Definizione gas provider
             ContractGasProvider gasProvider = new StaticGasProvider(
                     BigInteger.valueOf(20_000_000_000L),
-                    BigInteger.valueOf(6721975)
-            );
+                    BigInteger.valueOf(6721975));
 
             // Caricamento del contratto Tracking
             Tracking contract = Tracking.load(CONTRACT_ADDRESS, web3, credentials, gasProvider);
@@ -48,8 +47,7 @@ public class SetContractParametersDelegate implements JavaDelegate {
             // Conversione coordinate in lista di BigInteger
             List<BigInteger> locations = Arrays.asList(
                     BigInteger.valueOf(location1),
-                    BigInteger.valueOf(location2)
-            );
+                    BigInteger.valueOf(location2));
 
             // Invocazione del metodo smart contract per il settaggio dei parametri
             TransactionReceipt receipt = contract
@@ -58,13 +56,13 @@ public class SetContractParametersDelegate implements JavaDelegate {
 
             // Verifica dello stato della transazione
             if (receipt.isStatusOK()) {
-            	System.out.println("\n");
+                System.out.println("\n");
                 System.out.println("╔═══════════════════════════════════════════════════════╗");
-                System.out.println("║      ✅ PARAMETRI DEL CONTRATTO SETTATI CON SUCCESSO    ║");
+                System.out.println("       ✅ PARAMETRI DEL CONTRATTO SETTATI CON SUCCESSO  ");
                 System.out.println("╠═══════════════════════════════════════════════════════╣");
-                System.out.println("║ 🧭 Destinazione attesa  ➤ [" + location1 + ", " + location2 + "]");
-                System.out.println("║ ⏱️  Lead Time (sec)     ➤ " + leadTime);
-                System.out.println("║ 💰 Token in palio       ➤ " + payment);
+                System.out.println("    🧭 Destinazione attesa  ➤ [" + location1 + ", " + location2 + "]");
+                System.out.println("    ⏱️  Lead Time (sec)     ➤ " + leadTime);
+                System.out.println("    💰 Token in palio       ➤ " + payment);
                 System.out.println("╚═══════════════════════════════════════════════════════╝");
                 System.out.println("\n");
             } else {

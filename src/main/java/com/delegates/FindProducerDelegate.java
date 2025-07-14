@@ -14,7 +14,7 @@ import java.math.BigInteger;
 public class FindProducerDelegate implements JavaDelegate {
 
     private static final String ADMIN_PRIVATE_KEY = "0xa2b9c09bf9585b711bc5e482afb8040c26659bdeba6bd6bc16d256690a781160";
-    private static final String CONTRACT_ADDRESS = "0x12EAb68ea02CD2805a79167e0FF4aDae54530701";
+    private static final String CONTRACT_ADDRESS = "0x3D3E8af1ce11ECB37012F9EE29087B8B46b97c75";
 
     @Override
     public void execute(DelegateExecution execution) {
@@ -45,14 +45,14 @@ public class FindProducerDelegate implements JavaDelegate {
             // Stampa dei dati
             System.out.println("\n");
             System.out.println("╔════════════════════════════════════════════════════╗");
-            System.out.println("║        ℹ️  DATI PRODUTTORE RECUPERATI              ║");
+            System.out.println("        ℹ️  DATI PRODUTTORE              ");
             System.out.println("╠════════════════════════════════════════════════════╣");
-            System.out.println("║ 🆔 Address        ➤ " + producerAddress);
-            System.out.println("║ 📛 Nome           ➤ " + name);
-            System.out.println("║ ☎️ Telefono        ➤ " + phoneNo);
-            System.out.println("║ 🏙️  Città/Stato    ➤ " + cityState);
-            System.out.println("║ 🌍 Paese          ➤ " + country);
-            System.out.println("║ 📄 Certificato    ➤ " + (certified ? "✅ Sì" : "❌ No"));
+            System.out.println("		👤 Address Ethereum : " + credentials.getAddress());
+            System.out.println("		📛 Nome             : " + name);
+            System.out.println("		📞 Telefono         : " + phoneNo);
+            System.out.println("		🌍 Città/Stato      : " + cityState);
+            System.out.println("		🗺️ Paese            : " + country);
+            System.out.println("        📄 Certificato    ➤ " + (certified ? "✅ Sì" : "❌ No"));
             System.out.println("╚════════════════════════════════════════════════════╝");
             System.out.println("\n");
 

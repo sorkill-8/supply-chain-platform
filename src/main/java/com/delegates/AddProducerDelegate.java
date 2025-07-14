@@ -16,7 +16,7 @@ public class AddProducerDelegate implements JavaDelegate {
 
     private static final String USER1_PRIVATE_KEY = "0xed9ebb7bfb97a093f5b48d7aaaad93d4fe8c309283f4f5a0910273f1575fd5bf";
     
-    private static final String CONTRACT_ADDRESS = "0x12EAb68ea02CD2805a79167e0FF4aDae54530701";
+    private static final String CONTRACT_ADDRESS = "0x3D3E8af1ce11ECB37012F9EE29087B8B46b97c75";
 
     @Override
     public void execute(DelegateExecution execution) throws Exception {
@@ -46,16 +46,16 @@ public class AddProducerDelegate implements JavaDelegate {
 
             if (receipt.isStatusOK()) {
             	System.out.println("╔════════════════════════════════════════════════════════════╗");
-                System.out.println("║ ✅ PRODUTTORE REGISTRATO CON SUCCESSO SULLA BLOCKCHAIN   ║");
+                System.out.println("     ✅ PRODUTTORE REGISTRATO CON SUCCESSO SULLA BLOCKCHAIN   ");
                 System.out.println("╠════════════════════════════════════════════════════════════╣");
-                System.out.println("║ ➤ Address Ethereum : " + credentials.getAddress());
-                System.out.println("║ ➤ Nome             : " + name);
-                System.out.println("║ ➤ Telefono         : " + phoneNo);
-                System.out.println("║ ➤ Città/Stato      : " + cityState);
-                System.out.println("║ ➤ Paese            : " + country);
+                System.out.println("		👤 Address Ethereum : " + credentials.getAddress());
+                System.out.println("		📛 Nome             : " + name);
+                System.out.println("		📞 Telefono         : " + phoneNo);
+                System.out.println("		🌍 Città/Stato      : " + cityState);
+                System.out.println("		🗺️ Paese            : " + country);
                 System.out.println("╠════════════════════════════════════════════════════════════╣");
-                System.out.println("║ ⚠️  Stato Certificazione : NON ancora certificato.           ");
-                System.out.println("║    Attendere validazione da parte dell'amministratore.   ");
+                System.out.println(" 		⚠️ Attenzione! Non sei ancora certificato.           ");
+                System.out.println("    	Attendere validazione da parte dell'amministratore.   ");
                 System.out.println("╚════════════════════════════════════════════════════════════╝");
             } else {
                 throw new RuntimeException("❌ Transazione fallita a livello di blockchain.");

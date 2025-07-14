@@ -17,7 +17,7 @@ public class CheckReputationDelegate implements JavaDelegate {
     private static final String ADMIN_PRIVATE_KEY = "0xa2b9c09bf9585b711bc5e482afb8040c26659bdeba6bd6bc16d256690a781160";
 
     // Indirizzo del contratto TrustLedger già deployato
-    private static final String TRUSTLEDGER_CONTRACT_ADDRESS = "0x30bFAeaBEcd5AeDb10579a7b87e850567f86CDAC";
+    private static final String TRUSTLEDGER_CONTRACT_ADDRESS = "0xD03615E5328afbB51b5f6953d03f5288D8e87308";
 
     @Override
     public void execute(DelegateExecution execution) {
@@ -47,10 +47,10 @@ public class CheckReputationDelegate implements JavaDelegate {
             // Stampa a console della reputazione
             System.out.println("\n");
             System.out.println("╔═════════════════════════════════════════════════════════╗");
-            System.out.println("║              📈 REPUTAZIONE FORNITORE                   ║");
+            System.out.println("              📈 REPUTAZIONE FORNITORE                     ");
             System.out.println("╠═════════════════════════════════════════════════════════╣");
-            System.out.println("║ 🏷️  Fornitore:        " + supplierAddress);
-            System.out.println("║ ⭐ Reputazione:       " + reputation + " %");
+            System.out.println("      🏷️  Fornitore:        " + supplierAddress);
+            System.out.println("      ⭐ Reputazione:       " + reputation + " %");
             System.out.println("╚═════════════════════════════════════════════════════════╝\n");
 
         } catch (Exception e) {

@@ -23,7 +23,7 @@ public class ReceiveShipmentDelegate implements JavaDelegate {
     private static final String USER1_ADDRESS = "0x8d59bf8B11A96BdCDA008025E025da491EAdAf4B";
 
     // Indirizzo del contratto Tracking già deployato
-    private static final String CONTRACT_ADDRESS = "0x32279D62DaDdADaC73Cd3c72184d88766cE109f5";
+    private static final String CONTRACT_ADDRESS = "0xb561AbfF1D8dc5432D7a7b46F3AF6456d5c7B59c";
 
     @Override
     public void execute(DelegateExecution execution) {
@@ -38,49 +38,46 @@ public class ReceiveShipmentDelegate implements JavaDelegate {
             // Connessione alla blockchain
             Web3j web3 = Web3j.build(new HttpService("http://127.0.0.1:7545"));
             Credentials receiverCredentials = Credentials.create(USER2_PRIVATE_KEY);
-            String receiverAddress = receiverCredentials.getAddress();
 
             ContractGasProvider gasProvider = new StaticGasProvider(
                     BigInteger.valueOf(20_000_000_000L),
-                    BigInteger.valueOf(6_721_975)
-            );
+                    BigInteger.valueOf(6_721_975));
 
             // Caricamento del contratto Tracking
             Tracking contract = Tracking.load(CONTRACT_ADDRESS, web3, receiverCredentials, gasProvider);
 
             List<BigInteger> finalLocation = Arrays.asList(
                     BigInteger.valueOf(location1),
-                    BigInteger.valueOf(location2)
-            );
+                    BigInteger.valueOf(location2));
 
             // Esecuzione della funzione receiveShipment del contratto
             TransactionReceipt receipt = contract
                     .receiveShipment(trackingNo, item, BigInteger.valueOf(quantity), finalLocation)
                     .send();
-            
+
             System.out.println("\n");
             System.out.println("╔════════════════════════════════════════════════════════════╗");
-            System.out.println("║       📦 SPEDIZIONE RICEVUTA DAL DESTINATARIO (User2)     ║");
+            System.out.println("       ✅ SPEDIZIONE RICEVUTA DAL DESTINATARIO (User2)        ");
             System.out.println("╠════════════════════════════════════════════════════════════╣");
-            System.out.println("║ 📌 Tracking No:     " + trackingNo);
-            System.out.println("║ 🧾 Item:            " + item);
-            System.out.println("║ 🔢 Quantità:        " + quantity);
-            System.out.println("║ 🧭 Posizione:       [" + location1 + ", " + location2 + "]");
-            System.out.println("║ 👤 Ricevente:       " + receiverAddress);
+            System.out.println("      📌 Tracking No:     " + trackingNo);
+            System.out.println("      🧾 Item:            " + item);
+            System.out.println("      🔢 Quantità:        " + quantity);
+            System.out.println("      🧭 Posizione:       [" + location1 + ", " + location2 + "]");
 
             if (receipt.isStatusOK()) {
-            	System.out.println("╠════════════════════════════════════════════════════════════╣");
-                System.out.println("║ ✅ La spedizione è stata ricevuta con successo.           ");
+                System.out.println("╠════════════════════════════════════════════════════════════╣");
+                System.out.println("    ✅ La spedizione è stata ricevuta con successo.           ");
             } else {
-            	System.out.println("╠════════════════════════════════════════════════════════════╣");
-                System.out.println("║ ❌ La transazione è fallita sulla blockchain.");
+                System.out.println("╠════════════════════════════════════════════════════════════╣");
+                System.out.println("    ❌ La transazione è fallita sulla blockchain.");
             }
 
         } catch (Exception ex) {
             // Gestione di errori noti: mismatch, tracking errato, ecc.
-        	System.err.println("❌ Errore durante la ricezione della spedizione:");
+            System.err.println("❌ Errore durante la ricezione della spedizione:");
             System.err.println("📛 Dettagli: " + ex.getMessage());
-            System.err.println("💡 Possibili cause: quantità errata, nome articolo non corrispondente o trackingNo inesistente.");
+            System.err.println(
+                    "💡 Possibili cause: quantità errata, nome articolo non corrispondente o trackingNo inesistente.");
         }
 
         try {
@@ -89,8 +86,7 @@ public class ReceiveShipmentDelegate implements JavaDelegate {
             Credentials checkCreds = Credentials.create(USER2_PRIVATE_KEY);
             ContractGasProvider gasProvider = new StaticGasProvider(
                     BigInteger.valueOf(20_000_000_000L),
-                    BigInteger.valueOf(6_721_975)
-            );
+                    BigInteger.valueOf(6_721_975));
 
             Tracking contract = Tracking.load(CONTRACT_ADDRESS, web3, checkCreds, gasProvider);
             BigInteger senderBalance = contract.getBalance(USER1_ADDRESS).send();

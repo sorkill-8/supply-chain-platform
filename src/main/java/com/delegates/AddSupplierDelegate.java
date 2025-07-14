@@ -20,7 +20,7 @@ public class AddSupplierDelegate implements JavaDelegate {
     private static final String USER1_ADDRESS = "0x8d59bf8B11A96BdCDA008025E025da491EAdAf4B";
 
     // Indirizzo del contratto TrustLedger già deployato
-    private static final String CONTRACT_ADDRESS = "0x30bFAeaBEcd5AeDb10579a7b87e850567f86CDAC";
+    private static final String CONTRACT_ADDRESS = "0xD03615E5328afbB51b5f6953d03f5288D8e87308";
 
     @Override
     public void execute(DelegateExecution execution) {
@@ -38,8 +38,7 @@ public class AddSupplierDelegate implements JavaDelegate {
 
             ContractGasProvider gasProvider = new StaticGasProvider(
                     BigInteger.valueOf(20_000_000_000L),
-                    BigInteger.valueOf(6_721_975)
-            );
+                    BigInteger.valueOf(6_721_975));
 
             // Caricamento del contratto TrustLedger
             TrustLedger contract = TrustLedger.load(CONTRACT_ADDRESS, web3, credentials, gasProvider);
@@ -53,14 +52,14 @@ public class AddSupplierDelegate implements JavaDelegate {
 
             System.out.println("\n");
             System.out.println("╔════════════════════════════════════════════════════════════╗");
-            System.out.println("║          ✅ FORNITORE REGISTRATO CON SUCCESSO              ║");
+            System.out.println("          ✅ FORNITORE REGISTRATO CON SUCCESSO               ");
             System.out.println("╠════════════════════════════════════════════════════════════╣");
-            System.out.println("║ 👤 Address:       " + USER1_ADDRESS);
-            System.out.println("║ 📛 Nome:          " + name);
-            System.out.println("║ 📞 Telefono:      " + phoneNo);
-            System.out.println("║ 🌍 Città/Stato:   " + cityState);
-            System.out.println("║ 🗺️  Paese:         " + country);
-            System.out.println("║ 📦 Tipo Beni:     " + goodsType);
+            System.out.println("     👤 Address:       " + USER1_ADDRESS);
+            System.out.println("     📛 Nome:          " + name);
+            System.out.println("     📞 Telefono:      " + phoneNo);
+            System.out.println("     🌍 Città/Stato:   " + cityState);
+            System.out.println("     🗺️  Paese:         " + country);
+            System.out.println("     📦 Tipo Beni:     " + goodsType);
             System.out.println("╚════════════════════════════════════════════════════════════╝");
             System.out.println("\n");
 
