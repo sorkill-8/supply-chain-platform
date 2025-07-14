@@ -28,4 +28,4 @@ La piattaforma consente di:
 
 1. Clona il repository:
    ```bash
-   git clone https://github.com/tuo-username/tuo-repo.git
+   git clone https://github.com/sorkill-8/supply-chain-platform
